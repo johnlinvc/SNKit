@@ -66,7 +66,22 @@ open class SNView {
         return _subviews
     }
 
-    public required init(frame: CGRect) {}
+    public var cssAttributes:[String : String] = [ : ]
+
+    public required init(frame: CGRect) {
+        cssAttributes["position"] = "absolute"
+        cssAttributes["left"] = "\( frame.origin.x)"
+        cssAttributes["top"] = "\( frame.origin.y)"
+        cssAttributes["width"] = "\( frame.size.width)"
+        cssAttributes["height"] = "\( frame.size.height)"
+    }
+
+    open func cssString() -> String{
+        return cssAttributes.map {
+            "\($0): \($1)"
+        }.joined(separator:";")
+    }
+
     public func addSubview(_ view: SNView){
         self._subviews.append(view)
     }
@@ -93,7 +108,7 @@ open class SNLabel : SNView {
 
     //extra methods
     open override func renderHTML() -> SNResponse {
-        return SNResponse("<h1>\(text)</h1>")
+        return SNResponse("<div style=\"\(cssString())\">\(text)</div>")
     }
 }
 #endif
