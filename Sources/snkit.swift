@@ -112,3 +112,31 @@ open class SNLabel : SNView {
     }
 }
 #endif
+
+#if os(iOS)
+open class SNButton : UILabel {
+}
+#elseif os(OSX)
+public struct SNControlState : OptionSet {
+    public let rawValue: UInt
+    public init(rawValue: UInt) {
+        self.rawValue = rawValue
+    }
+    public static let Normal = SNControlState(rawValue: 1)
+}
+
+open class SNButton : SNView {
+    public required init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    var normalTitle = "Button"
+    open func setTitle(_ title: String, forState state: SNControlState) {
+        self.normalTitle = title
+    }
+
+    //extra methods
+    open override func renderHTML() -> SNResponse {
+        return SNResponse("<button style=\"\(cssString())\">\(normalTitle)</button>")
+    }
+}
+#endif
