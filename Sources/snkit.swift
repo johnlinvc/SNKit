@@ -46,6 +46,12 @@ open class SNWindow {
     open var rootViewController : SNViewController?
 
     //extra methods
+
+    let bootstrapLink = "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\" integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\" crossorigin=\"anonymous\">"
+
+    open func renderHeader() -> String{
+        return bootstrapLink
+    }
     open func dispatch(query: [String:String]) -> String {
         var actions:[String] = []
         for k in query.values {
@@ -54,7 +60,7 @@ open class SNWindow {
         self.rootViewController?.respondToActions(actions)
         let body = self.rootViewController?.renderHTML() ?? ""
         print(body)
-        let response = "<html><body>\(body)</body></html>"
+        let response = "<html><head>\(renderHeader())</head><body>\(body)</body></html>"
         return response
     }
 
@@ -121,6 +127,7 @@ open class SNLabel : UILabel {
 open class SNLabel : SNView {
     public required init(frame: CGRect) {
         super.init(frame: frame)
+        self.cssAttributes["font-size"] = "20px"
     }
     open var text = ""
 
@@ -154,6 +161,7 @@ public struct SNControlEvents : OptionSet {
 open class SNButton : SNView {
     public required init(frame: CGRect) {
         super.init(frame: frame)
+        self.cssAttributes["font-size"] = "20px"
     }
     var normalTitle = "Button"
     open func setTitle(_ title: String, forState state: SNControlState) {
@@ -181,7 +189,7 @@ open class SNButton : SNView {
         }
     }
     open override func renderHTML() -> SNResponse {
-        return SNResponse("<button style=\"\(cssString())\" onclick=\"\(onClickString())\">\(normalTitle)</button>")
+        return SNResponse("<button class=\"btn btn-default\" style=\"\(cssString())\" onclick=\"\(onClickString())\">\(normalTitle)</button>")
     }
 }
 #endif
